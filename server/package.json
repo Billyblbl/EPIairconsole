@@ -1,0 +1,18 @@
+{
+  "name": "epiairconsole",
+  "version": "1.0.0",
+  "description": "Air console clone built for EPITECH year end project 1",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@git.epitech.eu:/guillaume.astorgis@epitech.eu/YEP_project1_2019"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.13.1"
+  }
+}
