@@ -7,8 +7,9 @@ services:
     - "8081:8081"
   # apk-build:
   #   build: app
-  # web:
-  #   build: web
-  #   restart: on-failure
-  #   ports:
-  #     - "8080:8080"
+  web:
+    build: web
+    stdin_open: true
+    restart: on-failure
+    ports:
+    - "8080:8080"
