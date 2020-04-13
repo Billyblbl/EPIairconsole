@@ -1,15 +1,19 @@
-version: '2.0'
+version: '3'
 services:
   api:
     build: api
     restart: on-failure
     ports:
-    - "8081:8081"
-  # apk-build:
-  #   build: app
+        - "8081:8081"
+
+  app:
+    build: ./app
+    volumes: 
+        - "./app/apk:/result"
+
   web:
     build: web
     stdin_open: true
     restart: on-failure
     ports:
-    - "8080:8080"
+        - "8080:8080"
