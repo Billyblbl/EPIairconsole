@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name='YEP_project1_2019-App'
