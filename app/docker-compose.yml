@@ -1,8 +1,0 @@
-# docker build -t app . && docker run -v "./apk:/result" app
-version: "3"
-
-services: 
-    app:
-        build: .
-        volumes: 
-            - "./apk:/result"
