@@ -11,8 +11,5 @@
     "url": "git@git.epitech.eu:/guillaume.astorgis@epitech.eu/YEP_project1_2019"
   },
   "author": "",
-  "license": "MIT",
-  "dependencies": {
-    "react": "^16.13.1"
-  }
+  "license": "MIT"
 }
