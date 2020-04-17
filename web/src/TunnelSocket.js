@@ -1,3 +1,4 @@
+'use strict';
 
 export class TunnelSocket extends WebSocket {
 	constructor(url, role, code, protocols) {
@@ -90,3 +91,5 @@ export class TunnelSocket extends WebSocket {
 	}
 
 }
+
+export { TunnelSocket as default }
