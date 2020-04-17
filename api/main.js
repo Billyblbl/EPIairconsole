@@ -9,43 +9,51 @@ const connections = {
 }
 
 server.on('connection', (websocket, req) => {
-	connections.pending.push(websocket)
-
-
-	websocket.on('message', (message) => {
-		console.log('received: ', message)
-		try {
-			switch (message.type) {
-				case 'register': register(websocket, message.code, message.role)
-					break;
-				case 'transmit': transmit(websocket, message.data)
-					break;
-				default:
-					break;
-			}
-		} catch (error) {
-			console.error(error.message)
-			if (message.msgid) {
-				websocket.send({type: 'error', msgid: message.msgid, reason: error.message})
-			}
+	try {
+		websocket.sendObj = (obj) => {
+			websocket.send(JSON.stringify(obj))
 		}
-	})
+		connections.pending.push(websocket)
 
-	websocket.on('error', (error) => {
-		console.error('error: %s', error)
-	})
 
-	websocket.on('close', () => {
-		console.log('closed websocket')
-	})
+		websocket.on('message', (message) => {
+			message = receiveObj(message)
+			console.log('received: ', message)
+			try {
+				switch (message.type) {
+					case 'register': register(websocket, message.code, message.role)
+						break;
+					case 'transmit': transmit(websocket, message.data)
+						break;
+					default:
+						break;
+				}
+			} catch (error) {
+				console.error(error.message)
+				if (message.msgid) {
+					websocket.sendObj({ type: 'error', msgid: message.msgid, reason: error.message })
+				}
+			}
+		})
 
-	websocket.on('ping', () => {
-		websocket.pong('pong', false)
-	})
+		websocket.on('error', (error) => {
+			console.error('error: %s', error)
+		})
 
-	console.log(`Added connection ${req.connection.remoteAddress}`)
+		websocket.on('close', () => {
+			console.log('closed websocket')
+		})
 
-	websocket.send({type: 'ready'})
+		websocket.on('ping', () => {
+			websocket.pong('pong', false)
+		})
+
+		console.log(`Added connection ${req.connection.remoteAddress}`)
+
+		websocket.sendObj({ type: 'ready' })
+	} catch (error) {
+		console.error(error.message)
+	}
 })
 
 console.log(`Websocket API server listening on port ${port}`)
@@ -54,7 +62,7 @@ function register(websocket, code, role) {
 	if (code === undefined) {
 		if (role === 'emitter') { throw new Error(`Cannot register as emitter without a connection code`) }
 		code = genCode()
-		websocket.send({type: 'code', code: code})
+		websocket.sendObj({ type: 'code', code: code })
 	}
 	if (connections[code] === undefined || connections[code] === null) {
 		connections[code] = {
@@ -92,4 +100,8 @@ function transmit(websocket, data) {
 			websocket.room.emitter.send(data)
 			break;
 	}
+}
+
+function receiveObj(serialized) {
+	return JSON.parse(serialized)
 }
